@@ -153,7 +153,7 @@ app.get('/test', async (req, res) => {
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  err.statusCode = 300
+  err.statusCode = 300 
   err.message = err.message || 'An error occurred on the server'
   res.status(err.statusCode).json({ response: err.message })
 })
