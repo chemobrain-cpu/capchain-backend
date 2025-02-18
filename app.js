@@ -13,10 +13,9 @@ const data = require('./data')
 let request = require('request')
 
 const app = express()
-
 const corsOptions = {
   origin: '*', // You can restrict this to a specific domain like 'http://localhost:3000'
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'UPDATE'],
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'UPDATE','PUT'],
   allowedHeaders: ['Content-Type', 'Authorization', 'header'], // Add custom headers here
   preflightContinue: false,
   optionsSuccessStatus: 200 // Some legacy browsers choke on 204
