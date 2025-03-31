@@ -16,10 +16,6 @@ const Mailjet = require('node-mailjet')
 var request = require('request');
 
 
-Admin.find().then(data=>{
-    console.log(data)
-})
-
 
 module.exports.signupAdmin = async (req, res, next) => {
 

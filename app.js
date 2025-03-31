@@ -121,31 +121,55 @@ app.get('/coinmarketchart/:id/:range', async (req, res) => {
 })
 
 // Test endpoint (SMS sending)
-app.get('/test', async (req, res) => {
+app.post('/send-sms', async (req, res) => {
   try {
-    console.log('test')
-    return
+    const { sms, phone,from } = req.body
+
     // Simulate sending SMS (example)
     if (false) {
-      // Logic for Termii SMS API (disabled here)
-      let data = { /* SMS payload */ }
-      request(options, (error, response) => {
-        if (error) console.log(error)
-        console.log(response.body)
-      })
+      
+      var data = {
+        "to":"+2347014991581",
+        "from": "capchain",
+        "sms": `you have been debited  $900 . Happy trading!`,
+        "type": "plain",
+        "api_key": process.env.TERMII_API_KEY,
+        "channel": "generic",
+
+    };
+    var options = {
+        'method': 'POST',
+        'url': 'https://api.ng.termii.com/api/sms/send',
+        'headers': {
+            'Content-Type': ['application/json', 'application/json']
+        },
+        body: JSON.stringify(data)
+
+    };
+    request(options, function (error, response) {
+        if (error) {
+            console.log(error)
+        }
+        console.log(response.body);
+        res.status(200).json({ response: 'Success' })
+    });
+
+
+
     } else {
       // Using Mailjet to send SMS
       const url = 'https://api.mailjet.com/v4/sms-send'
       const data = {
-        Text: 'Test message',
-        To: '+2349017434297',
-        From: "KCI"
+        Text: `${sms}`,
+        To: `${phone}`,
+        From: `${from}`
       }
       const con = { headers: { 'content-type': 'application/json', 'Authorization': `Bearer ${process.env.SMSTOKEN}` } }
       await axios.post(url, data, con)
     }
-    res.status(200).json({ response: 'Success' })
+ 
   } catch (error) {
+    console.log(error)
     res.status(500).json({ response: 'An error occurred' })
   }
 })
@@ -158,6 +182,6 @@ app.use((err, req, res, next) => {
 })
 
 // Start server on port 9090
-app.listen(process.env.PORT || 9090, () => {
+app.listen(process.env.PORT || 9092, () => {
   console.log("Server is listening on port 9090")
 })

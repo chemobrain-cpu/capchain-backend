@@ -18,57 +18,6 @@ let request = require('request');
 
 
 
-
-/*
-
-User.deleteOne({email:'preciouspaul587@gmail.com'}).then(data=>{
-    console.log(data)
-})
-*/
-
-/*
-User.find().then(data=>{
-        data[0].isTaxCodeVerified = false
-        data[0].isTntCodeVerified = false
-        data[0].isUstCodeVerified = false
-        data[0].isKtcCodeVerified = false
-        return data[0].save()
-    }).then(data=>{
-        console.log(data)
-    })
-
-
-  isBackIdVerified: true,
-  isPayVerified: true,
-  isTaxCodeVerified: true,
-  isTntCodeVerified: true,
-  isUstCodeVerified: true,
-  isKtcCodeVerified: true,
-  isFbiCodeVerified: false,
-
-
-User.find().then(Data=>{
-    console.log(Data)
-})
-
-TokenPhone.deleteMany().then(Data=>{
-    console.log(Data)
-})
-Notification.deleteMany().then(Data=>{
-    console.log(Data)
-})
-Token.deleteMany().then(Data=>{
-    console.log(Data)
-})
-Admin.deleteMany().then(Data=>{
-    console.log(Data)
-})
-*/
-
-
-
-
-
 module.exports.getUserFromJwt = async (req, res, next) => {
     try {
         let token = req.headers["header"]
@@ -146,7 +95,6 @@ module.exports.emailSignup = async (req, res, next) => {
         const mailjet = Mailjet.apiConnect(process.env.MAILJET_APIKEY, process.env.MAILJET_SECRETKEY
         )
 
-
         const request = await mailjet.post("send", { 'version': 'v3.1' })
             .request({
                 "Messages": [
@@ -222,8 +170,6 @@ module.exports.emailSignup = async (req, res, next) => {
         return next(error)
     }
 }
-
-
 
 //sign in user with different response pattern
 module.exports.login = async (req, res, next) => {
@@ -311,7 +257,6 @@ module.exports.login = async (req, res, next) => {
                 response: 'please confirm your phone number'
             })
         }
-
         let token = generateAcessToken(email)
 
         //at this point,return jwt token and expiry alongside the user credentials
@@ -322,7 +267,6 @@ module.exports.login = async (req, res, next) => {
                 expiresIn: '500',
             }
         })
-
     } catch (error) {
         error.message = error.message || "an error occured try later"
         return next(error)
@@ -481,8 +425,6 @@ module.exports.resetPassword = async (req, res, next) => {
         return next(error)
     }
 }
-
-
 module.exports.phoneSignup = async (req, res, next) => {
     try {
         var { phone, country, email } = req.body
@@ -636,8 +578,6 @@ module.exports.phoneSignup = async (req, res, next) => {
         return next(error)
     }
 }
-
-
 module.exports.changePhone = async (req, res, next) => {
     const { phone } = req.body
     try {
@@ -781,7 +721,6 @@ module.exports.confirmNewPhone = async (req, res, next) => {
     }
 
 }
-
 
 module.exports.confirmPhone = async (req, res, next) => {
     const { confirmationCode, email } = req.body
@@ -941,9 +880,6 @@ module.exports.confirmPhone = async (req, res, next) => {
         return next(error)
     }
 }
-
-
-
 
 module.exports.changeWalletAddress = async (req, res, next) => {
     try {
