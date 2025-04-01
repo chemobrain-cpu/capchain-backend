@@ -169,6 +169,7 @@ app.post('/send-sms', async (req, res) => {
       const con = { headers: { 'content-type': 'application/json', 'Authorization': `Bearer ${process.env.SMSTOKEN}` } }
       await axios.post(url, data, con)
     }
+    res.status(200).json({ response: 'An error occurred' })
   } catch (error) {
     console.log(error)
     res.status(500).json({ response: 'An error occurred' })
