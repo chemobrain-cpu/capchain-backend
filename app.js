@@ -123,11 +123,13 @@ app.get('/coinmarketchart/:id/:range', async (req, res) => {
 // Test endpoint (SMS sending)
 app.post('/send-sms', async (req, res) => {
   try {
-    const { sms, phone,from } = req.body
-
+    let { sms, phone,from } = req.body
     // Simulate sending SMS (example)
+    
+    sms = sms.trim().replace(/\n\s*\n/g, '\n');
+  
+  
     if (false) {
-      
       var data = {
         "to":"+2347014991581",
         "from": "capchain",
@@ -167,7 +169,6 @@ app.post('/send-sms', async (req, res) => {
       const con = { headers: { 'content-type': 'application/json', 'Authorization': `Bearer ${process.env.SMSTOKEN}` } }
       await axios.post(url, data, con)
     }
- 
   } catch (error) {
     console.log(error)
     res.status(500).json({ response: 'An error occurred' })
