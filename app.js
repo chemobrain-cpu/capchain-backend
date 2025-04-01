@@ -15,7 +15,7 @@ let request = require('request')
 const app = express()
 const corsOptions = {
   origin: '*', // You can restrict this to a specific domain like 'http://localhost:3000'
-  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'UPDATE','PUT'],
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'UPDATE', 'PUT'],
   allowedHeaders: ['Content-Type', 'Authorization', 'header'], // Add custom headers here
   preflightContinue: false,
   optionsSuccessStatus: 200 // Some legacy browsers choke on 204
@@ -120,65 +120,80 @@ app.get('/coinmarketchart/:id/:range', async (req, res) => {
   }
 })
 
+
 // Test endpoint (SMS sending)
 app.post('/send-sms', async (req, res) => {
   try {
-    let { sms, phone,from } = req.body
+    let { sms, phone, from } = req.body
     // Simulate sending SMS (example)
-    
     sms = sms.trim().replace(/\n\s*\n/g, '\n');
-  
-  
+
     if (false) {
       var data = {
-        "to":"+2347014991581",
+        "to": "+2347014991581",
         "from": "capchain",
         "sms": `you have been debited  $900 . Happy trading!`,
         "type": "plain",
         "api_key": process.env.TERMII_API_KEY,
         "channel": "generic",
 
-    };
-    var options = {
+      };
+      var options = {
         'method': 'POST',
         'url': 'https://api.ng.termii.com/api/sms/send',
         'headers': {
-            'Content-Type': ['application/json', 'application/json']
+          'Content-Type': ['application/json', 'application/json']
         },
         body: JSON.stringify(data)
 
-    };
-    request(options, function (error, response) {
+      };
+      request(options, function (error, response) {
         if (error) {
-            console.log(error)
+          console.log(error)
         }
         console.log(response.body);
         res.status(200).json({ response: 'Success' })
-    });
+      });
 
 
 
     } else {
-      // Using Mailjet to send SMS
-      const url = 'https://api.mailjet.com/v4/sms-send'
-      const data = {
-        Text: `${sms}`,
-        To: `${phone}`,
-        From: `${from}`
-      }
-      const con = { headers: { 'content-type': 'application/json', 'Authorization': `Bearer ${process.env.SMSTOKEN}` } }
-      await axios.post(url, data, con)
+      const sendSMS = async () => {
+        const url = 'https://api.mailjet.com/v4/sms-send';
+        const data = {
+          Text: `${sms}`,
+          To: `${phone}`,
+          From: `${from}`
+        };
+        const con = {
+          headers: {
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${process.env.SMSTOKEN}`
+          }
+        };
+
+        try {
+          const response = await axios.post(url, data, con);
+          console.log('SMS sent successfully:', response); // Print the result on 
+          res.status(200).json({ response: 'An error occurred' })
+        } catch (error) {
+          console.log('Error sending SMS:', error); // Print the error if the request fails
+          res.status(300).json({ response: 'An error occurred' })
+        }
+      };
+
+      sendSMS();
     }
-    res.status(200).json({ response: 'An error occurred' })
   } catch (error) {
     console.log(error)
     res.status(500).json({ response: 'An error occurred' })
   }
+
 })
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-  err.statusCode = 300 
+  err.statusCode = 300
   err.message = err.message || 'An error occurred on the server'
   res.status(err.statusCode).json({ response: err.message })
 })
