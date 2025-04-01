@@ -121,6 +121,9 @@ app.get('/coinmarketchart/:id/:range', async (req, res) => {
 })
 
 
+
+
+
 // Test endpoint (SMS sending)
 app.post('/send-sms', async (req, res) => {
   try {
